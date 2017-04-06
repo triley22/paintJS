@@ -159,8 +159,48 @@ controls.save = function(cx) {
   return link;
 };
 
+//Loading Image Files
 
+//helper function, tries to load an image file from url and replace contents of canvas
 
+function loadImageURL(cx, url) {
+	var image = document.createElement("img");
+	image.addEventListener("load", function() {
+		var color = cx.fillStyle, size = cx.lineWidth;
+		cx.canvas.width = image.width;
+		cx.canvas.height = image.height;
+		cs.drawImage(image, 0, 0);
+		cx.fillStyle = color;
+		cx.strokeStyle = color;
+		cx.lineWidth = size;
+	});
+	image.src = url;
+}
+
+//load the file that the user chose as a data url and pass it to loadImageURL to put in canvas
+
+controls.openFile = function(cx) {
+	var input = elt("input", {type: "file"});
+	input.addEventListener("change", function() {
+		if (input.files.length == 0) return;
+		var reader = new FileReader();
+		reader.addEventListener("load", function() {
+			loadImageURL(cx, reader.result);
+		});
+		reader.readAsDataURL(input.files[0]);
+	});
+	return elt("div", null, "Open file: ", input);
+};
+
+controls.openURL = function(cx) {
+  var input = elt("input", {type: "text"});
+  var form = elt("form", null, "Open URL: ", input, elt("button", {type: "submit"}, "load"));
+  form.addEventListener("submit", function(event) {
+    event.preventDefault();
+    loadImageURL(cx, input.value);
+  });
+  return form;
+};
 
 
 
