@@ -112,6 +112,31 @@ tools.Erase = function(event, cx) {
 	});
 };
 
+//Colors and Brush Size
+
+controls.color = function(cx) {
+	var input = elt("input", {type: "color"});
+	input.addEventListener("change", function() {
+		cx.fillStyle = input.value;
+		cx.strokeStyle = input.value;
+	});
+	return elt("span", null, "Color: ", input);
+};
+
+//code generates options from an array of brush sizes, lineWidth updates when brush size is chosen
+
+contols.brushSize = function(cx) {
+	var select = elt("select");
+	var sizes = [1, 2, 3, 5, 8, 12, 25, 35, 50, 75, 100];
+	sizes.forEach(function(size) {
+		select.appendChild(elet("option", {value: size}, size + " pixels"));
+	});
+	select.addEventListener("change", function() {
+		cx.lineWidth = select.value;
+	});
+	return elt("span", null, "Brush size: ", select);
+};
+
 
 
 
